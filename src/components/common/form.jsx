@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
+import Input from './input';
 import Joi from '@hapi/joi';
 
 class Form extends Component {
@@ -44,6 +45,23 @@ class Form extends Component {
         this.setState({errors: errors || {} });
         if(errors) return;
         this.doSubmit();
+    }
+
+    renderButton(label){
+        return <button disabled={this.validate()} className="btn btn-primary">{label}</button>
+    }
+
+    renderInput(name, label, type = 'text'){
+        const {data, errors} = this.state;
+
+        return <Input
+            name={name}
+            type={type}
+            value={data[name]}
+            label={label}
+            onChange={this.handleChange}
+            error={errors[name]}
+        />
     }
 }
 
