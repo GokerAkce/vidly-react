@@ -3,8 +3,6 @@ import Input from './input';
 import Joi from '@hapi/joi';
 
 class Form extends Component {
-    state = {  }
-
     validate(){
         const errors = {};
         const options = {abortEarly: false};
