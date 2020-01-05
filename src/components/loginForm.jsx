@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './common/form';
 import Joi from '@hapi/joi';
+import { login } from '../services/authService';
 
 class LoginForm extends Form {
     state = { 
@@ -9,14 +10,25 @@ class LoginForm extends Form {
      }
 
     schema = {
-        username : Joi.string().min(4).max(30).required().label('Username'),
-        password : Joi.string().min(8).max(30).required().label('Password')
+        username : Joi.string().email({tlds: false}).required().label('Username'),
+        password : Joi.string().min(6).max(30).required().label('Password')
 
     }
 
-    doSubmit(){
-        //Ajax calls
-        console.log("Sumitted.");
+    doSubmit = async() => {
+        const { username, password } = this.state.data
+        try {
+            const {data: jwt} = await login(username, password);
+            localStorage.setItem("token", jwt);
+            this.props.history.push('/');
+        } catch (ex) {
+            if(ex.response && ex.response.status === 400){
+                const errors = {...this.state.errors};
+                errors.username = ex.response.data;
+                this.setState({ errors });
+            }
+        }
+        
     }
     render() { 
         return (
