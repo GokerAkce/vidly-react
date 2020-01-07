@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Route, Redirect, Switch} from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
+
 import Movies from './components/movies';
 import NavBar from './components/common/navBar';
 import Customers from './components/customers';
@@ -9,16 +9,15 @@ import NotFound from './components/notFound';
 import MovieForm from './components/movieForm';
 import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
+import Logout from './components/logout';
+import auth from './services/authService';
 
 class App extends Component {
   state = {}
 
-  componentWillMount(){
-    try {
-      const jwt = localStorage.getItem("token");
-      const user = jwtDecode(jwt);
-      this.setState({ user });
-    } catch(ex){}
+  componentDidMount(){
+    const user = auth.getCurrentUser();
+    this.setState({ user });
   }
 
   render() { 
@@ -32,6 +31,7 @@ class App extends Component {
           <Route path="/movies" component={Movies} />
           <Route path="/rentals" component={Rentals}></Route>
           <Route path="/login" component={LoginForm} />
+          <Route path="/logout" component={Logout} />
           <Route path="/register" component={RegisterForm} />
           <Route path="/not-found" component={NotFound} />
           <Redirect from="/" to="/movies" />
