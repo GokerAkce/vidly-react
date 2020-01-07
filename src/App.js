@@ -11,6 +11,7 @@ import LoginForm from './components/loginForm';
 import RegisterForm from './components/registerForm';
 import Logout from './components/logout';
 import auth from './services/authService';
+import ProtectedRoute from './components/common/protectedRoute';
 
 class App extends Component {
   state = {}
@@ -26,9 +27,11 @@ class App extends Component {
       <NavBar user={this.state.user}/>
       <main className="container">
         <Switch>
-          <Route path="/movies/:id" component={MovieForm}></Route>
+          <ProtectedRoute path="/movies/:id" component={MovieForm}/>
           <Route path="/customers" component={Customers} />
-          <Route path="/movies" component={Movies} />
+          <Route 
+            path="/movies" 
+            render={props => <Movies {...props} user={this.state.user}/> } />
           <Route path="/rentals" component={Rentals}></Route>
           <Route path="/login" component={LoginForm} />
           <Route path="/logout" component={Logout} />
